@@ -1,0 +1,32 @@
+name: Docker Build
+on:
+  push
+jobs:
+  container-build:
+    runs-on: ubuntu-latest
+    container:
+      image: ccob/windows-llvm-cross-msvc:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Build x64      
+        run: >
+          mkdir build-x86_64 &&
+          cd build-x86_64 &&
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/opt/toolchain/x86_64-pc-windows-msvc.cmake -DCMAKE_INSTALL_PREFIX=$PWD/dist .. &&
+          cmake --build . && 
+          cmake --install .         
+      - name: Build x86      
+        run: >
+          mkdir build-x86 &&
+          cd build-x86 &&
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/opt/toolchain/i386-pc-windows-msvc.cmake -DCMAKE_INSTALL_PREFIX=$PWD/dist .. &&
+          cmake --build . && 
+          cmake --install .     
+      - name: Deploy
+        uses: actions/upload-artifact@v4
+        with:
+         name: BOF-PE
+         path: |
+            build-x86_64/dist/*   
+            build-x86/dist/* 
