@@ -433,7 +433,7 @@ int GetPackedArguments(int argc, const char* argv[], const char* bof_args_def, s
 
 int main(int argc, char** argv){
 
-    if(argc < 3){
+    if(argc < 2){
         puts("Not enough arguments to load BOF PE file.\nloader pefile [fmt [arg1] [arg2] ...]");
         return -1;
     }
