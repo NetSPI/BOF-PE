@@ -433,7 +433,7 @@ int GetPackedArguments(int argc, const char* argv[], const char* bof_args_def, s
 
 int main(int argc, char** argv){
 
-    if(argc < 3){
+    if(argc < 2){
         puts("Not enough arguments to load BOF PE file.\nloader pefile [fmt [arg1] [arg2] ...]");
         return -1;
     }
@@ -443,8 +443,8 @@ int main(int argc, char** argv){
 
         if(pe.exports().count() > 0){
 
-            //Find the first exported function 
-            auto entry = bof_entry_ptr(pe.exports().begin()->address());
+            //Find the 'go' exported function 
+            auto entry = bof_entry_ptr(pe.exports().find("go").address());
                        
             if (argc - 2 <= 0) {
                 //If we have less than 2 arguments, then no BOF arguments were provided
